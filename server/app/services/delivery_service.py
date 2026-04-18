@@ -1,22 +1,51 @@
 from app.core.redis import r
 import json
+import time
 
-async def flush(user_id, zone_type):
-    messages = r.zrange(f"queue:{user_id}", 0, -1)
+async def flush(user_id: str, zone_type: str) -> list:
+    raw_messages = await r.zrange(f"queue:{user_id}", 0, -1)
 
-    parsed = [json.loads(m) for m in messages]
+    parsed = []
+    expired = []
+    now = int(time.time())
 
-    print("Flushing for:", user_id)
-    print("Messages:", parsed)
-    
-    filtered = [
-        m for m in parsed
-        if zone_type != "critical_only" or m["priority"] == "critical"
-    ]
+    for raw in raw_messages:
+        try:
+            m = json.loads(raw)
+            enqueued_at = m.get("enqueued_at", now)
+            ttl = m.get("ttl", 86400)
 
-    for msg in filtered:
-        r.zrem(f"queue:{user_id}", json.dumps(msg, sort_keys=True))
+            if now - enqueued_at > ttl:
+                # Message has expired — remove it silently
+                expired.append(raw)
+            else:
+                parsed.append((raw, m))
+        except Exception:
+            expired.append(raw)
 
-    print("Delivering:", filtered)
+    # Remove expired messages
+    for raw in expired:
+        await r.zrem(f"queue:{user_id}", raw)
 
-    return filtered
+    if expired:
+        print(f"[DELIVERY] Expired and dropped {len(expired)} message(s) for {user_id}")
+
+    # Apply zone filter
+    filtered = []
+    kept = []
+
+    for raw, m in parsed:
+        if zone_type == "critical_only" and m.get("priority") != "critical":
+            kept.append(raw)  # not delivered yet — stay in queue
+        else:
+            filtered.append((raw, m))
+
+    # Remove delivered messages from queue
+    for raw, _ in filtered:
+        await r.zrem(f"queue:{user_id}", raw)
+
+    delivered = [m for _, m in filtered]
+
+    print(f"[DELIVERY] Flushed {len(delivered)} message(s) for {user_id} | zone={zone_type} | kept={len(kept)} | expired={len(expired)}")
+
+    return delivered

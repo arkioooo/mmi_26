@@ -1,1 +1,10 @@
 .env
+.gitignore
+.pyc
+__pycache__/
+# Ignore database files
+*.db
+# Ignore log files
+*.log
+# Ignore virtual environment
+venv/
