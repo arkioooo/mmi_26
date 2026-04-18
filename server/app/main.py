@@ -1,5 +1,12 @@
+import logging
 from fastapi import FastAPI
 from app.api import notify, beacon, messages, geo, generate
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 app = FastAPI()
 

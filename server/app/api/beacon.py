@@ -24,7 +24,10 @@ async def beacon(data: dict):
     print(f"[BEACON] User {user_id} at ({lat}, {lng}) | conn={connectivity_score}")
 
     zone = await geo_service.match(user_id, lat, lng)
+    deferral_active = zone.get("type") == "defer" and zone.get("deferral_times")
     print("[BEACON] Zone:", zone)
+    if deferral_active:
+        print(f"[BEACON] Time-based deferral active: {zone.get('deferral_times')}")
 
     can_deliver = (
         connectivity_score >= 2 and

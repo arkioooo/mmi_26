@@ -5,3 +5,4 @@ redis
 asyncpg
 sqlalchemy
 httpx
+scikit-learn>=1.3.0
