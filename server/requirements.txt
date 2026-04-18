@@ -5,5 +5,4 @@ redis
 asyncpg
 sqlalchemy
 httpx
-joblib
-scikit-learn==1.6.1
+scikit-learn>=1.3.0

@@ -28,7 +28,6 @@
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
         <path d="M2 4h12M2 8h12M2 12h8"/>
       </svg>
-      <span class="pn-badge" id="nav-qc">0</span>
     </div>
 
     <div class="pn-item" data-label="Drive Simulator" onclick="showPage('drive',this)">
@@ -148,37 +147,18 @@
     <div>
       <div class="route-panel">
         <div class="route-header">
-          <div id="route-label" style="font-size:13px;font-weight:600;">Route · Commute</div>
-          <div class="route-tools">
-            <select id="drive-track" class="track-select" onchange="setDriveTrack(this.value)">
-              <option value="commute">Commute</option>
-              <option value="metro">Metro Line</option>
-              <option value="airport">Airport Run</option>
-            </select>
-            <div class="sig-strip">
-              <div class="sigb" id="sb0"></div><div class="sigb" id="sb1"></div>
-              <div class="sigb" id="sb2"></div><div class="sigb" id="sb3"></div>
-              <span class="sig-lbl" id="sig-lbl">4G</span>
-            </div>
+          <div style="font-size:13px;font-weight:600;">Route · Bangalore</div>
+          <div class="sig-strip">
+            <div class="sigb" id="sb0"></div><div class="sigb" id="sb1"></div>
+            <div class="sigb" id="sb2"></div><div class="sigb" id="sb3"></div>
+            <span class="sig-lbl" id="sig-lbl">4G</span>
           </div>
         </div>
-        <div class="drive-map" id="drive-map">
-          <svg class="drive-map-svg" viewBox="0 0 900 320" preserveAspectRatio="none" aria-hidden="true">
-            <g class="city-grid">
-              <path d="M60 72 H840 M58 158 H842 M60 244 H840 M130 32 V292 M260 24 V300 M390 32 V292 M520 24 V300 M650 32 V292 M780 24 V300"/>
-              <path d="M88 276 C210 198 332 220 448 136 S688 52 826 104"/>
-              <path d="M76 108 C190 134 268 86 372 92 S560 162 704 144 S812 178 852 234"/>
-            </g>
-            <g id="tsegs"></g>
-          </svg>
-          <div class="drive-zone-pill" id="drive-zone-pill">always_deliver</div>
-          <div class="drive-car" id="dr-car">
-            <span class="car-core">🚗</span>
-            <span class="car-ping"></span>
-          </div>
-          <div class="drive-waypoints" id="wps"></div>
-          <div class="packet-layer" id="packet-layer"></div>
+        <div class="road-wrap">
+          <div class="road-track" id="tsegs"></div>
+          <div class="car-emoji" id="dr-car" style="left:20px;">🚗</div>
         </div>
+        <div class="wps" id="wps"></div>
       </div>
       <div class="drive-status mono" id="dr-msg">Press Start — notifications queue in dead zones and flush when signal returns.</div>
       <div class="nrain" id="nrain"><div class="nrl">notification stream</div></div>
