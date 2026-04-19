@@ -147,7 +147,14 @@
     <div>
       <div class="route-panel">
         <div class="route-header">
-          <div style="font-size:13px;font-weight:600;">Route · Bangalore</div>
+          <div style="display:flex;align-items:center;gap:10px;flex:1;">
+            <span id="route-label" style="font-size:13px;font-weight:600;">Route · Commute</span>
+            <select id="drive-track" onchange="setDriveTrack(this.value)" style="height:28px;background:var(--s2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:11px;font-family:'JetBrains Mono',monospace;padding:0 8px;outline:none;cursor:pointer;">
+              <option value="commute">🚗 Commute</option>
+              <option value="metro">🚇 Metro Line</option>
+              <option value="airport">✈️ Airport Run</option>
+            </select>
+          </div>
           <div class="sig-strip">
             <div class="sigb" id="sb0"></div><div class="sigb" id="sb1"></div>
             <div class="sigb" id="sb2"></div><div class="sigb" id="sb3"></div>
