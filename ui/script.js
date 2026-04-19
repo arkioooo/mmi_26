@@ -845,20 +845,29 @@ async function loadGeo() { loadGeoCards(); }
 async function loadMessages() {
   try {
     const res  = await API.get(`/api/messages/${S.userId}`);
-    const msgs = res.messages || [];
-    // DB messages are already delivered — populate delivered tab
-    // but only add ones not already tracked in session
-    msgs.forEach(m => {
-      const already = S.delivered.some(d => d.content === m.content && d.ts === (m.created_at || ''));
-      if (!already) {
-        S.delivered.push({
-          ...m, status:'delivered',
-          cat: m.category, pri: m.priority,
-          ts: m.created_at ? new Date(m.created_at).toLocaleTimeString() : '—',
-          userId: S.userId
-        });
-      }
-    });
+    const delivered = res.delivered || res.messages || [];
+    const pending = res.pending || [];
+
+    S.delivered = delivered.map(m => ({
+      ...m,
+      status: 'delivered',
+      cat: m.cat || m.category,
+      pri: m.pri || m.priority,
+      ts: m.created_at ? new Date(m.created_at).toLocaleTimeString() : (m.ts || '—'),
+      userId: m.userId || S.userId
+    }));
+
+    S.pending = pending.map(m => ({
+      ...m,
+      status: 'pending',
+      cat: m.cat || m.category,
+      pri: m.pri || m.priority,
+      ts: m.created_at ? new Date(m.created_at).toLocaleTimeString() : (m.ts || '—'),
+      userId: m.userId || S.userId
+    }));
+
+    S.stats.pending = S.pending.length;
+    S.stats.delivered = S.delivered.length;
     updStats();
   } catch(e) {
     console.warn('loadMessages failed:', e.message);
