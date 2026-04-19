@@ -44,7 +44,7 @@ async def notify(data: dict):
             "type": "bypass"
         })
 
-        print(f"[NOTIFY] Immediate delivery → {recipient_id}")
+        print(f"[NOTIFY] Immediate delivery -> {recipient_id}")
 
         return {"status": "sent_immediately", **base}
 

@@ -64,7 +64,7 @@ async def create_geo(data: dict):
     else:
         zones[existing_idx] = zone
 
-    print(f"[GEO] Added zone → {zone['label']} for {user_id}")
+    print(f"[GEO] Added zone -> {zone['label']} for {user_id}")
     if zone.get("deferral_times"):
         print(f"[GEO] Deferral times: {zone['deferral_times']}")
 

@@ -49,7 +49,7 @@ async def match(user_id, lat, lng):
                     "deferral_times": deferral_times
                 }
 
-        print("[GEO] No zone matched → default always_deliver")
+        print("[GEO] No zone matched -> default always_deliver")
 
         return {"type": "always_deliver", "label": "default"}
 

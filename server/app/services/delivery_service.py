@@ -61,8 +61,8 @@ async def flush(user_id: str, zone_type: str) -> list:
 
     remaining_queue = to_keep
     await clear_queue(user_id)
-    for m in remaining_queue:
-        queue.append(m)
+    queue = await get_queue(user_id)
+    queue.extend(remaining_queue)
 
     delivered = to_deliver
 
