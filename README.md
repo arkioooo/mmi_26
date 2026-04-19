@@ -19,7 +19,7 @@ Smart notification system that **prioritizes, defers, and delivers messages** ba
 
 ## **Features**
 
-* **AI Classification (Ollama + Mistral)**
+* **AI Classification (Spam + Priority Classifiers)**
 
   * Priority: `critical`, `high`, `normal`, `low`
   * Category: `otp`, `transactional`, `social`, `marketing`, `alert`
@@ -38,10 +38,6 @@ Smart notification system that **prioritizes, defers, and delivers messages** ba
   * `defer`
   * `critical_only`
 
-* **Priority Queue (Redis)**
-
-  * Sorted set: `priority × timestamp`
-
 * **TTL Expiry**
 
   * OTP: 5 min
@@ -57,21 +53,7 @@ Smart notification system that **prioritizes, defers, and delivers messages** ba
 
 ---
 
-## **Architecture**
-
-```
-Frontend → FastAPI → AI (Ollama)
-                 ↓
-             Redis Queue
-                 ↓
-        Geo Service (Postgres)
-                 ↓
-            Delivery Engine
-```
-
----
-
-## **API**
+## **API Endpoints**
 
 **POST /api/notify**
 
@@ -110,28 +92,18 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-**.env**
-
-```
-POSTGRES_URL=postgresql+asyncpg://user:pass@localhost/db
-REDIS_HOST=localhost
-REDIS_PORT=6379
-OLLAMA_URL=http://localhost:11434
-OLLAMA_MODEL=mistral
-```
 
 Run services:
 
 ```bash
-ollama run mistral
 uvicorn app.main:app --reload
-python ttl_worker.py
+python -m http.server 3000
 ```
 
 Open:
 
 ```
-index.html
+http://[::1]:3000/
 ```
 
 ---

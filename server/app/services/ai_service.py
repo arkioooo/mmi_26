@@ -33,9 +33,7 @@ def load_models():
         category_model = None
         config = None
 
-# Load models when service starts
 load_models()
-
 
 def _get_priority_for_category(category: str) -> str:
     """Map category to priority level"""

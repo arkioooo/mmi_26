@@ -148,62 +148,139 @@
       <div class="route-panel">
         <div class="route-header">
           <div style="display:flex;align-items:center;gap:10px;flex:1;">
-            <span id="route-label" style="font-size:13px;font-weight:600;">Route · Commute</span>
-            <select id="drive-track" onchange="setDriveTrack(this.value)" style="height:28px;background:var(--s2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:11px;font-family:'JetBrains Mono',monospace;padding:0 8px;outline:none;cursor:pointer;">
+            <span id="route-label" style="font-size:13px;font-weight:600;">
+              Route · Commute
+            </span>
+            <select
+              id="drive-track"
+              onchange="setDriveTrack(this.value)"
+              style="height:28px;background:var(--s2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:11px;font-family:'JetBrains Mono',monospace;padding:0 8px;outline:none;cursor:pointer;"
+            >
               <option value="commute">🚗 Commute</option>
               <option value="metro">🚇 Metro Line</option>
               <option value="airport">✈️ Airport Run</option>
             </select>
           </div>
+
           <div class="sig-strip">
-            <div class="sigb" id="sb0"></div><div class="sigb" id="sb1"></div>
-            <div class="sigb" id="sb2"></div><div class="sigb" id="sb3"></div>
+            <div class="sigb" id="sb0"></div>
+            <div class="sigb" id="sb1"></div>
+            <div class="sigb" id="sb2"></div>
+            <div class="sigb" id="sb3"></div>
             <span class="sig-lbl" id="sig-lbl">4G</span>
           </div>
         </div>
-        <div class="road-wrap">
-          <div class="road-track" id="tsegs"></div>
-          <div class="car-emoji" id="dr-car" style="left:20px;">🚗</div>
+
+        <div class="drive-map" id="drive-map">
+          <svg
+            class="drive-map-svg"
+            viewBox="0 0 900 320"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <g id="tsegs"></g>
+          </svg>
+
+          <div class="drive-waypoints" id="wps"></div>
+          <div class="packet-layer" id="packet-layer"></div>
+          <div class="drive-zone-pill" id="drive-zone-pill">
+            Home · always_deliver
+          </div>
+
+          <div class="drive-car" id="dr-car">
+            <div class="car-ping"></div>
+            <div class="car-core">🚗</div>
+          </div>
         </div>
-        <div class="wps" id="wps"></div>
       </div>
-      <div class="drive-status mono" id="dr-msg">Press Start — notifications queue in dead zones and flush when signal returns.</div>
-      <div class="nrain" id="nrain"><div class="nrl">notification stream</div></div>
+      <div class="drive-status mono" id="dr-msg">
+        Press Start — notifications queue in dead zones and flush when signal returns.
+      </div>
+
+      <div class="nrain" id="nrain">
+        <div class="nrl">notification stream</div>
+      </div>
+
       <div class="drive-controls">
-        <button class="btn btn-p" id="dr-btn" onclick="toggleDrive()" style="min-width:130px;">▶ Start Drive</button>
+        <button class="btn btn-p" id="dr-btn" onclick="toggleDrive()" style="min-width:130px;">
+          ▶ Start Drive
+        </button>
         <button class="btn btn-s" onclick="resetDrive()">↺ Reset</button>
         <div class="speed-wrap">
           Speed
-          <input type="range" min="1" max="5" value="3" id="dr-spd" oninput="document.getElementById('spd-lbl').textContent=this.value+'×'">
+          <input
+            type="range"
+            min="1"
+            max="5"
+            value="3"
+            id="dr-spd"
+            oninput="document.getElementById('spd-lbl').textContent=this.value+'×'"
+          >
           <span id="spd-lbl">3×</span>
         </div>
       </div>
-      <div class="sh"><span class="sh-t">Event Log</span><div class="sh-l"></div><button class="btn btn-s" style="padding:4px 10px;font-size:11px;" onclick="clearLog()">clear</button></div>
+
+      <div class="sh">
+        <span class="sh-t">Event Log</span>
+        <div class="sh-l"></div>
+        <button class="btn btn-s" style="padding:4px 10px;font-size:11px;" onclick="clearLog()">
+          clear
+        </button>
+      </div>
+
       <div class="log" id="logstream">
-        <div class="le"><span class="lt">--:--</span><span class="linfo">Drive Simulator ready</span></div>
+        <div class="le">
+          <span class="lt">--:--</span>
+          <span class="linfo">Drive Simulator ready</span>
+        </div>
       </div>
     </div>
     <div class="queue-side">
       <div class="dqs">
         <div class="dqh" style="color:var(--amber);">
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v5l3 3"/><circle cx="8" cy="8" r="6"/></svg>
-          Pending <span class="dqcnt" id="dqpc" style="color:var(--amber);">0</span>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M8 3v5l3 3"/>
+            <circle cx="8" cy="8" r="6"/>
+          </svg>
+          Pending
+          <span class="dqcnt" id="dqpc" style="color:var(--amber);">0</span>
         </div>
-        <div class="dql" id="dqpl"><div style="text-align:center;padding:8px;font-size:10px;color:var(--dim);font-family:'JetBrains Mono',monospace;">empty</div></div>
+        <div class="dql" id="dqpl">
+          <div style="text-align:center;padding:8px;font-size:10px;color:var(--dim);font-family:'JetBrains Mono',monospace;">
+            empty
+          </div>
+        </div>
       </div>
+
       <div class="dqs">
         <div class="dqh" style="color:var(--green);">
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8l4 4 8-8"/></svg>
-          Delivered <span class="dqcnt" id="dqdc" style="color:var(--green);">0</span>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M2 8l4 4 8-8"/>
+          </svg>
+          Delivered
+          <span class="dqcnt" id="dqdc" style="color:var(--green);">0</span>
         </div>
-        <div class="dql" id="dqdl"><div style="text-align:center;padding:8px;font-size:10px;color:var(--dim);font-family:'JetBrains Mono',monospace;">none yet</div></div>
+        <div class="dql" id="dqdl">
+          <div style="text-align:center;padding:8px;font-size:10px;color:var(--dim);font-family:'JetBrains Mono',monospace;">
+            none yet
+          </div>
+        </div>
       </div>
+
       <div class="dqs">
         <div class="dqh" style="color:var(--red);">
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v5M8 12v1"/><circle cx="8" cy="8" r="6"/></svg>
-          Bypass <span class="dqcnt" id="dqbc" style="color:var(--red);">0</span>
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M8 3v5M8 12v1"/>
+            <circle cx="8" cy="8" r="6"/>
+          </svg>
+          Bypass
+          <span class="dqcnt" id="dqbc" style="color:var(--red);">0</span>
         </div>
-        <div class="dql" id="dqbl"><div style="text-align:center;padding:8px;font-size:10px;color:var(--dim);font-family:'JetBrains Mono',monospace;">none yet</div></div>
+        <div class="dql" id="dqbl">
+          <div style="text-align:center;padding:8px;font-size:10px;color:var(--dim);font-family:'JetBrains Mono',monospace;">
+            none yet
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -1,5 +1,3 @@
-# app/api/messages.py
-
 from fastapi import APIRouter
 from app.api.notify import DELIVERED_STORE
 from app.services.queue_service import get_queue

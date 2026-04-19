@@ -4,11 +4,7 @@ import random
 router = APIRouter()
 
 # In-memory session store (per user)
-# In production → Redis
 used_messages = {}
-
-
-# --- MORE MESSAGES ---
 
 MESSAGES = [
 
